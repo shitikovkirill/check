@@ -1,0 +1,27 @@
+if has nix-shell
+then
+    use nix
+    echo "You use NixOS."
+else
+    echo "You do not use NixOS."
+fi
+
+dotenv
+
+layout poetry
+# Create virtual environment dir for PyCharm
+VENV_DIR=venv
+if [ ! -d $VENV_DIR ];
+ then ln -s $(dirname $(dirname $(poetry run which python))) $VENV_DIR;
+fi;
+
+watch_dir ./nix/
+watch_dir ./docs/source/
+watch_file ./poetry.lock
+
+export ALEMBIC_CONFIG=$(find_up alembic.ini)
+
+if on_git_branch; then
+  echo && git status --short --branch &&
+  echo && git fetch --verbose
+fi
