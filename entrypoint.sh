@@ -13,15 +13,30 @@ prod() {
 migrate() {
     echo "Run migration..."
 
-    # alembic -c alembic.ini upgrade head
+    alembic -c alembic.ini upgrade head
 }
 
 dev() {
     echo "Dev..."
+    createkey
 
     migrate
 
     prod
+}
+
+createkey() {
+    mkdir -p ./tmp
+
+    FILE=./tmp/private.pem
+
+    if [ -f $FILE ]; then
+        echo "File $FILE exists."
+    else
+        echo "File $FILE does not exist."
+        ssh-keygen -t rsa -b 4096 -m PEM -f ./tmp/private.pem -q -N ""
+        ssh-keygen -f ./tmp/private.pem -e -m PKCS8 > ./tmp/public.pem
+    fi
 }
 
 debug() {
@@ -33,7 +48,7 @@ debug() {
 test() {
     echo "Runn tests..."
 
-    exec pytest ./tests --cov=tournaments.api --cov-report=html
+    exec pytest ./tests
 }
 
 help() {

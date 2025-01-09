@@ -11,9 +11,12 @@ class IdField:
 
 
 class TimeStamp:
-    created_on: datetime = Field(func.now(), sa_type=UtcDateTime)
+    created_on: datetime = Field(func.now(), sa_type=UtcDateTime, exclude=True)
     updated_on: datetime = Field(
-        func.now(), sa_column_kwargs={"onupdate": func.now()}, sa_type=UtcDateTime
+        func.now(),
+        sa_column_kwargs={"onupdate": func.now()},
+        sa_type=UtcDateTime,
+        exclude=True,
     )
 
 

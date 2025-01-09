@@ -16,30 +16,22 @@ class JWTProvider:
         self.public_key = str(token_config.public_key)
         self.algorithm = ALGORITHMS.RS256
 
-    def get(self, data: dict, expires_delta: Optional[timedelta] = None):
+    def get(self, data: dict, expires_at: Optional[datetime] = None):
         to_encode = data.copy()
-        if expires_delta:
-            expire = datetime.now(UTC) + expires_delta
-        else:
-            expire = datetime.now(UTC) + timedelta(minutes=15)
-        to_encode.update({"exp": int(expire.timestamp())})
+        if not expires_at:
+            expires_at = datetime.now(UTC) + timedelta(minutes=15)
+        to_encode.update({"exp": int(expires_at.timestamp())})
         encoded_jwt = create_token(
             to_encode, private_key=self.private_key, algorithm=self.algorithm
         )
         return encoded_jwt
 
-    def get_token(self, user: User, expires_delta):
-        return self.get(
-            {"sub": str(user.id)},
-            expires_delta=expires_delta,
-        )
-
-    def get_id_token(self, user: User, expires_delta, additional=None):
+    def get_token(self, user: User, expires_at: datetime, additional=None):
         if additional is None:
             additional = {}
         return self.get(
             {"sub": str(user.id), **additional},
-            expires_delta=expires_delta,
+            expires_at=expires_at,
         )
 
     def decode(self, token):

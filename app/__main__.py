@@ -9,7 +9,7 @@ app = FastAPI(title="App")
 
 
 routes = [
-    {"router": auth.router, "prefix": "/auth"},
+    {"router": auth.router, "prefix": "/api"},
 ]
 
 for rout in routes:

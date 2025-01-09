@@ -6,4 +6,4 @@ from app.config.token import TokenConfig
 settings = Settings()
 log_config = LogConfig()
 db_config = DBConfig()
-# token_config = TokenConfig()
+token_config = TokenConfig()

@@ -1,4 +1,4 @@
-from pydantic import EmailStr, Field
+from pydantic import EmailStr
 from sqlmodel import SQLModel
 
 from app.auth.validators import PasswordField
@@ -8,4 +8,10 @@ class UserCreate(SQLModel):
 
     name: str
     email: EmailStr
-    password: PasswordField = Field(exclude=True)
+    password: PasswordField
+
+
+class UserAuth(SQLModel):
+
+    email: EmailStr
+    password: PasswordField
