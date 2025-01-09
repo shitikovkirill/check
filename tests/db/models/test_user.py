@@ -1,6 +1,6 @@
+from app.auth.dto.user import UserCreate
 from app.auth.providers.password import PasswordProvider
 from app.db.models.user import User
-from app.dto.user import UserCreate
 
 
 async def test_user(db):

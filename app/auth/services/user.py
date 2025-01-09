@@ -1,7 +1,7 @@
 from app.auth.dependencies.providers import PasswordProvider
+from app.auth.dto.user import UserCreate
 from app.db.dependencies.db import DbSession
 from app.db.models.user import User
-from app.auth.dto.user import UserCreate
 
 
 class UserService:
