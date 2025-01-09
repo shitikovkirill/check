@@ -11,7 +11,7 @@ class DBConfig(BaseSettings):
     user: str = "postgres"
     password: str = "password"
     name: str = "postgres"
-    host: str = "localhot"
+    host: str = "127.0.0.1"
     port: int = 5432
 
     @cached_property
