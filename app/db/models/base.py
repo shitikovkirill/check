@@ -1,5 +1,4 @@
 from datetime import datetime
-from typing import Optional
 
 from sqlalchemy.sql import func
 from sqlalchemy_utc import UtcDateTime
@@ -7,7 +6,7 @@ from sqlmodel import Field
 
 
 class IdField:
-    id: Optional[int] = Field(default=None, primary_key=True, index=True)
+    id: int | None = Field(default=None, primary_key=True, index=True)
 
 
 class TimeStamp:

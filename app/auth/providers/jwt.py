@@ -1,6 +1,5 @@
 import json
 from datetime import UTC, datetime, timedelta
-from typing import Optional
 
 from jose import jws
 from jose.constants import ALGORITHMS
@@ -16,7 +15,7 @@ class JWTProvider:
         self.public_key = str(token_config.public_key)
         self.algorithm = ALGORITHMS.RS256
 
-    def get(self, data: dict, expires_at: Optional[datetime] = None):
+    def get(self, data: dict, expires_at: datetime | None = None):
         to_encode = data.copy()
         if not expires_at:
             expires_at = datetime.now(UTC) + timedelta(minutes=15)

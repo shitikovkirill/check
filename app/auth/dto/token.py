@@ -1,6 +1,5 @@
 import uuid
 from datetime import datetime
-from typing import Optional
 
 from pydantic import BaseModel, Field
 
@@ -12,4 +11,4 @@ class JwtToken(BaseModel):
 
 
 class TokenData(BaseModel):
-    id: Optional[uuid.UUID] = Field(None, alias="sub")
+    id: uuid.UUID | None = Field(None, alias="sub")
