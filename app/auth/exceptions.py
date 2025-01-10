@@ -1,25 +1,25 @@
 from app.exceptions import AppException
 
 
-class UserException(AppException):
+class AuthException(AppException):
     """
     Get sam problem with user
     """
 
 
-class UserAlreadyExist(UserException):
+class UserAlreadyExist(AuthException):
     """
-    User not found
+    User already exist
     """
 
 
-class UserNotFound(UserException):
+class UserNotFound(AuthException):
     """
     User not exist
     """
 
 
-class NotCorrectAuthentication(UserException):
+class NotCorrectAuthentication(AuthException):
     """
     Not correct authentication
     """

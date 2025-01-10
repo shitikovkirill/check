@@ -3,9 +3,9 @@ from app.auth.providers.password import PasswordProvider
 from app.db.models.user import User
 
 
-async def test_user(db):
+async def test_user(db, email):
     pp = PasswordProvider()
-    user_dto = UserCreate(name="test", email="test@mail.com", password="Qwerty1")
+    user_dto = UserCreate(name="test", email=email, password="Qwerty1")
     user = User.model_validate(
         user_dto, update={"password": pp.ge_hash(user_dto.password.get_secret_value())}
     )

@@ -1,11 +1,13 @@
 from datetime import UTC, datetime
 
+from asyncpg.exceptions import UniqueViolationError
+from sqlalchemy.exc import IntegrityError
 from sqlmodel import select
 
 from app.auth.dependencies.providers import JWTProvider, PasswordProvider
 from app.auth.dto.token import JwtToken
 from app.auth.dto.user import UserAuth, UserCreate
-from app.auth.exceptions import NotCorrectAuthentication, UserNotFound
+from app.auth.exceptions import NotCorrectAuthentication, UserAlreadyExist, UserNotFound
 from app.config import token_config
 from app.db.dependencies.db import DbSession
 from app.db.models.user import User
@@ -29,7 +31,12 @@ class UserService:
         )
         user = User.model_validate(user_dto, update={"password": hashed_password})
         self.db.add(user)
-        await self.db.commit()
+        try:
+            await self.db.commit()
+        except IntegrityError as exc:
+            if exc.orig.__cause__.__class__ == UniqueViolationError:
+                raise UserAlreadyExist(f"User with email {user.email} already exist")
+            raise exc
         return user
 
     async def autentificate(self, user_dto: UserAuth) -> User:
@@ -38,13 +45,13 @@ class UserService:
         user = result.scalar()
 
         if not user:
-            raise UserNotFound()
+            raise UserNotFound(f"User with email {user_dto.email} not exist")
 
         if self.password_provider.verify(
             user_dto.password.get_secret_value(), user.password
         ):
             return user
-        raise NotCorrectAuthentication()
+        raise NotCorrectAuthentication("Not correct password")
 
     async def generate_jwt(self, user: User) -> JwtToken:
         expires_at = datetime.now(UTC) + token_config.token_expire
