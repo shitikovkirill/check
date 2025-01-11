@@ -12,5 +12,5 @@ class CheckService:
         self.db = db
 
     async def create(self, check: CheckDto, user: User):
-        
+
         return {"status": "ok"}
