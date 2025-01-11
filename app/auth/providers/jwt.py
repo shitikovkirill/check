@@ -1,10 +1,11 @@
 import json
 from datetime import UTC, datetime, timedelta
 
-from jose import jws
+from jose import JWSError, jws
 from jose.constants import ALGORITHMS
 
 from app.auth.dto.token import TokenData
+from app.auth.exceptions import InvalidTockenException
 from app.config import token_config
 from app.db.models.user import User
 
@@ -34,7 +35,12 @@ class JWTProvider:
         )
 
     def decode(self, token):
-        data = decode_token(token, public_key=self.public_key, algorithm=self.algorithm)
+        try:
+            data = decode_token(
+                token, public_key=self.public_key, algorithm=self.algorithm
+            )
+        except JWSError:
+            raise InvalidTockenException()
         data["exp"] = datetime.fromtimestamp(data["exp"])
         return TokenData(**data)
 

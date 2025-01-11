@@ -23,3 +23,7 @@ class NotCorrectAuthentication(AuthException):
     """
     Not correct authentication
     """
+
+
+class InvalidTockenException(AuthException):
+    "Not correct token"

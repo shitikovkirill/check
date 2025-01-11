@@ -19,11 +19,10 @@ class Payment(IdField, SQLModel, table=True):
     type: PaymentTyps
     amount: PositiveInt
 
-    check_id: int | None = Field(default=None, foreign_key="check.id")
-
 
 class Check(IdField, TimeStamp, SQLModel, table=True):
     products: List[Product] = Relationship(back_populates="product")
+    payment_id: int | None = Field(default=None, foreign_key="payment.id", unique=True)
     payment: Payment = Relationship(back_populates="payment")
     total: PositiveInt
     rest: PositiveInt

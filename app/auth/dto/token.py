@@ -1,4 +1,3 @@
-import uuid
 from datetime import datetime
 
 from pydantic import BaseModel, Field
@@ -11,4 +10,4 @@ class JwtToken(BaseModel):
 
 
 class TokenData(BaseModel):
-    id: uuid.UUID | None = Field(None, alias="sub")
+    id: str | None = Field(None, alias="sub")

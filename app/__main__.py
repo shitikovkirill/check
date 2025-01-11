@@ -3,13 +3,14 @@ import argparse
 import uvicorn
 from fastapi import FastAPI
 
-from app.routes import auth
+from app.routes import auth, check
 
 app = FastAPI(title="App")
 
 
 routes = [
     {"router": auth.router, "prefix": "/api"},
+    {"router": check.router, "prefix": "/api"},
 ]
 
 for rout in routes:

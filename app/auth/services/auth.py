@@ -1,31 +1,35 @@
-from fastapi import Depends, HTTPException, status
-from fastapi.security import OAuth2PasswordBearer
-from jose import JWTError
+from typing import Annotated
 
-from app.auth.providers.jwt import JWTProvider
+from fastapi import Depends, HTTPException, status
+from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
+
+from app.auth.dependencies.providers import JWTProvider
+from app.auth.exceptions import InvalidTockenException
 from app.db.dependencies.db import DbSession
 from app.db.models.user import User
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
+security = HTTPBearer()
 
 
 async def get_current_user(
     db: DbSession,
     jwt_provider: JWTProvider,
-    token: str = Depends(oauth2_scheme),
+    credentials: Annotated[HTTPAuthorizationCredentials, Depends(security)],
 ):
+    _, token = credentials
+
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Could not validate credentials",
-        headers={"WWW-Authenticate": "Bearer"},
+        headers={"Authenticate": "Bearer"},
     )
     try:
-        payload = jwt_provider.decode(token)
+        payload = jwt_provider.decode(token[1])
         if payload.id is None:
             raise credentials_exception
-    except JWTError:
+    except InvalidTockenException:
         raise credentials_exception
-    user = await db.get(User, payload.id)
+    user = await db.get(User, int(payload.id))
     if user is None:
         raise credentials_exception
     return user
