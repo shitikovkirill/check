@@ -3,7 +3,6 @@ from decimal import Decimal
 from typing import Annotated
 
 import annotated_types
-from pydantic import Strict
 
 
 class PriceValidator:
@@ -23,6 +22,4 @@ class PriceValidator:
         return value
 
 
-PriceField = Annotated[
-    Decimal, Strict(), annotated_types.Interval(gt=0), PriceValidator.validate
-]
+PriceField = Annotated[Decimal, annotated_types.Interval(gt=0), PriceValidator.validate]
