@@ -12,7 +12,7 @@ class Product(IdField, SQLModel, table=True):
     price: PositiveInt
     quantity: PositiveInt
 
-    check_id: int | None = Field(default=None, foreign_key="check.id")
+    check_id: int = Field(foreign_key="check.id")
     check: "Check" = Relationship(back_populates="products")
 
 
@@ -24,8 +24,16 @@ class Payment(IdField, SQLModel, table=True):
 
 
 class Check(IdField, TimeStamp, SQLModel, table=True):
-    products: List[Product] = Relationship(back_populates="check")
-    payment_id: int | None = Field(default=None, foreign_key="payment.id", unique=True)
-    payment: Payment = Relationship(back_populates="check")
+    products: List[Product] = Relationship(
+        back_populates="check", sa_relationship_kwargs={"lazy": "joined"}
+    )
+    payment_id: int = Field(
+        default=None, foreign_key="payment.id", unique=True, nullable=False
+    )
+    payment: Payment = Relationship(
+        back_populates="check", sa_relationship_kwargs={"lazy": "joined"}
+    )
     total: PositiveInt
     rest: PositiveInt
+
+    user_id: int = Field(foreign_key="user.id")

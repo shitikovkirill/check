@@ -2,6 +2,14 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "Run Fastapi app",
+            "type": "python",
+            "request": "launch",
+            "module": "uvicorn",
+            "justMyCode": false,
+            "args": ["app.__main__:app","--reload"]
+        },
+        {
             "name": "Local debug: attach",
             "type": "debugpy",
             "request": "attach",

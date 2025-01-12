@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends
 
 from app.auth.services.auth import get_current_active_user
 from app.check.dependencies import CheckService
-from app.check.dto import Check
+from app.check.dto import Check, CheckResponse
 from app.db.models.user import User
 
 router = APIRouter(
@@ -11,7 +11,7 @@ router = APIRouter(
 )
 
 
-@router.post("")
+@router.post("", response_model=CheckResponse)
 async def create_check(
     check: Check,
     service: CheckService,
