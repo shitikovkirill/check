@@ -1,22 +1,27 @@
-from typing import Annotated, List
+from datetime import datetime
+from typing import List
 
-from pydantic import AfterValidator, BeforeValidator, PositiveInt
+from pydantic import PositiveInt
 from sqlmodel import SQLModel
 
 from app.check.typs import PaymentTyps
-from app.check.validators import PriceField
+from app.check.validators import (
+    PriceDecimalToInt,
+    PriceIntToDecimal,
+    PriceRestIntToDecimal,
+)
 from app.db.models.base import IdField
 
 
 class Product(SQLModel):
     name: str
-    price: Annotated[PriceField, AfterValidator(lambda v: v * 100)]
+    price: PriceDecimalToInt
     quantity: PositiveInt
 
 
 class Payment(SQLModel):
     type: PaymentTyps
-    amount: Annotated[PriceField, AfterValidator(lambda v: v * 100)]
+    amount: PriceDecimalToInt
 
 
 class Check(SQLModel):
@@ -26,15 +31,18 @@ class Check(SQLModel):
 
 class ProductResponse(IdField, SQLModel):
     name: str
-    price: Annotated[PriceField, BeforeValidator(lambda v: v / 100), AfterValidator(float)]
+    price: PriceIntToDecimal
     quantity: PositiveInt
 
 
 class PaymentResponse(IdField, SQLModel):
     type: PaymentTyps
-    amount: Annotated[PriceField, BeforeValidator(lambda v: v / 100), AfterValidator(float)]
+    amount: PriceIntToDecimal
 
 
 class CheckResponse(IdField, SQLModel):
     products: List[ProductResponse]
     payment: PaymentResponse
+    total: PriceIntToDecimal
+    rest: PriceRestIntToDecimal
+    created_at: datetime
