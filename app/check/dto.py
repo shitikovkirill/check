@@ -26,13 +26,13 @@ class Check(SQLModel):
 
 class ProductResponse(IdField, SQLModel):
     name: str
-    price: Annotated[PriceField, BeforeValidator(lambda v: v / 100)]
+    price: Annotated[PriceField, BeforeValidator(lambda v: v / 100), AfterValidator(float)]
     quantity: PositiveInt
 
 
 class PaymentResponse(IdField, SQLModel):
     type: PaymentTyps
-    amount: Annotated[PriceField, BeforeValidator(lambda v: v / 100)]
+    amount: Annotated[PriceField, BeforeValidator(lambda v: v / 100), AfterValidator(float)]
 
 
 class CheckResponse(IdField, SQLModel):

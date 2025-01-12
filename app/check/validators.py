@@ -1,3 +1,3 @@
 from pydantic import condecimal
 
-PriceField = condecimal(gt=0, strict=True, decimal_places=2)
+PriceField = condecimal(gt=0, decimal_places=2)
