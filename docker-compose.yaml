@@ -9,6 +9,8 @@ services:
       PRIVATE_KEY: ./tmp/private.pem
       PUBLIC_KEY: ./tmp/public.pem
       DB_HOST: db
+    volumes:
+      - ".:/app"
     depends_on:
       - "db"
     ports:
