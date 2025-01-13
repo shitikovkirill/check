@@ -1,14 +1,13 @@
-      ФОП Джонсонюк Борис
+      ФОП {{owner.name}}
 ================================
-3.00 x 298 870.00
-Mavic 3T              896 610.00
+{% for product in check.products %}
+{{product.quantity}} x {{product.price}}
+{{product.name}}             {{product.quantity * product.price}}
 --------------------------------
-20.00 х 31 000.00
-Дрон FPV з акумулятором
-6S чорний             620 000.00
+{% endfor %}
 ================================
-СУМА                1 516 610.00
-Картка              1 516 610.00
-Решта                       0.00
+СУМА                {{check.total}}
+{{check.payment.type}} {{check.payment.amount}}
+Решта              {{check.rest}}
 ================================
-        14.08.2023 14:42
+{{check.created_at}}

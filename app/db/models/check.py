@@ -1,6 +1,6 @@
 from typing import List
 
-from pydantic import PositiveInt
+from pydantic import NonNegativeInt, PositiveInt
 from sqlmodel import Field, Relationship, SQLModel
 
 from app.check.typs import PaymentTyps
@@ -34,6 +34,6 @@ class Check(IdField, TimeStamp, SQLModel, table=True):
         back_populates="check", sa_relationship_kwargs={"lazy": "joined"}
     )
     total: PositiveInt
-    rest: PositiveInt
+    rest: NonNegativeInt
 
     user_id: int = Field(foreign_key="user.id")
