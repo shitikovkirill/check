@@ -19,7 +19,7 @@ class TestSignUp:
             "/api/user",
             json={
                 "name": "test",
-                "email": user.json().get("email"),
+                "email": user.get("email"),
                 "password": "Qwerty123",
             },
         )
@@ -68,7 +68,7 @@ class TestLogin:
         response = client.post(
             "/api/user/auth",
             json={
-                "email": user.json().get("email"),
+                "email": user.get("email"),
                 "password": "Qwerty123",
             },
         )
@@ -94,7 +94,7 @@ class TestLogin:
         response = client.post(
             "/api/user/auth",
             json={
-                "email": user.json().get("email"),
+                "email": user.get("email"),
                 "password": "Zwerty123",
             },
         )

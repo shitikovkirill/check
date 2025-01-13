@@ -36,7 +36,7 @@ class Check(IdField, TimeStamp, SQLModel, table=True):
     )
     total: PositiveInt
     rest: NonNegativeInt
-    
+
     sectet: str = Field(
         default_factory=secrets.token_urlsafe, index=True, unique=True, nullable=False
     )

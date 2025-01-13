@@ -20,4 +20,19 @@ async def user(client, email):
             "password": "Qwerty123",
         },
     )
-    return response
+    assert response.status_code == 200
+    return response.json()
+
+
+@pytest.fixture
+async def token(client, user):
+
+    response = client.post(
+        "/api/user/auth",
+        json={
+            "email": user.get("email"),
+            "password": "Qwerty123",
+        },
+    )
+    assert response.status_code == 200
+    return response.json().get("access_token")

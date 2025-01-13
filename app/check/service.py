@@ -29,7 +29,7 @@ class CheckService:
         except NoResultFound:
             raise CheckNotFound("Check with this id not found")
         return check
-    
+
     async def get_by_secret(self, secret):
         query = select(Check).where(Check.sectet == secret)
         result = await self.db.execute(query)
@@ -38,8 +38,8 @@ class CheckService:
         except NoResultFound:
             raise CheckNotFound("Check with this id not found")
         owner = await self.db.get(User, check.user_id)
-        return  check, owner
-        
+        return check, owner
+
     async def filter(
         self,
         user: User,
