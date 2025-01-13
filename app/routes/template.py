@@ -12,9 +12,9 @@ router = APIRouter(
 )
 
 
-@router.get("/{id}", response_class=PlainTextResponse)
-async def get_check_template(request: Request, id: int, service: CheckService,):    
-    check, owner = await service.get_by_secret(id)
+@router.get("/{secret}", response_class=PlainTextResponse)
+async def get_check_template(request: Request, secret: str, service: CheckService,):    
+    check, owner = await service.get_by_secret(secret)
     return templates.TemplateResponse(
         request=request,
         name="check.txt",

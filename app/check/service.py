@@ -31,8 +31,11 @@ class CheckService:
         return check
     
     async def get_by_secret(self, secret):
-        check = await self.db.get(Check, secret)
-        if check is None:
+        query = select(Check).where(Check.sectet == secret)
+        result = await self.db.execute(query)
+        try:
+            check = result.unique().one()[0]
+        except NoResultFound:
             raise CheckNotFound("Check with this id not found")
         owner = await self.db.get(User, check.user_id)
         return  check, owner
