@@ -1,0 +1,9 @@
+venv
+tmp
+htmlcov
+.coverage
+.direnv
+.git
+.mypy_cache
+.pytest_cache
+.env

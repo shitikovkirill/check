@@ -13,6 +13,8 @@ prod() {
 migrate() {
     echo "Run migration..."
 
+    wait-for-it db:5432
+
     alembic -c alembic.ini upgrade head
 }
 
@@ -26,6 +28,7 @@ dev() {
 }
 
 createkey() {
+    echo "Create key..."
     mkdir -p ./tmp
 
     FILE=./tmp/private.pem
