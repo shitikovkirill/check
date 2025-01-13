@@ -51,6 +51,10 @@ debug() {
 test() {
     echo "Runn tests..."
 
+    createkey
+
+    migrate
+
     exec pytest ./tests
 }
 
