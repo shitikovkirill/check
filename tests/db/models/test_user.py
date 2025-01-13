@@ -14,5 +14,5 @@ async def test_user(db, email):
     db.add(user)
     await db.commit()
     assert user.id is not None
-    assert user.created_on is not None
-    assert user.updated_on is not None
+    assert user.created_at is not None
+    assert user.updated_at is not None

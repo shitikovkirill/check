@@ -13,3 +13,9 @@ Go to [local dev](http://127.0.0.1:8000)
 ```bash
 docker compose run api test
 ```
+
+## Show coverage
+
+```bash
+python -m http.server 8000 --directory htmlcov/ --bind 0.0.0.0
+```

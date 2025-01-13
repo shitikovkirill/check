@@ -1,6 +1,5 @@
 venv
 tmp
-htmlcov
 .coverage
 .direnv
 .git

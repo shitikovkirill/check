@@ -55,9 +55,7 @@ test() {
 
     migrate
 
-    exec pytest ./tests  --no-cov-on-fail
-
-    exec python -m http.server 8000 --directory htmlcov/ --bind 0.0.0.0
+    exec pytest ./tests
 }
 
 help() {
