@@ -7,7 +7,7 @@ from pydantic import PositiveInt
 from app.auth.services.auth import get_current_active_user
 from app.check.dependencies import CheckService
 from app.check.dto import Check, CheckResponse
-from app.check.exceptions import CheckNotFound
+from app.check.exceptions import CheckNotFound, NotEnoughPaidMoneyException
 from app.check.typs import PaymentTyps
 from app.check.validators import PriceDecimalToInt
 from app.db.models.user import User
@@ -18,13 +18,27 @@ router = APIRouter(
 )
 
 
-@router.post("", response_model=CheckResponse)
+@router.post(
+    "",
+    response_model=CheckResponse,
+    responses={
+        status.HTTP_402_PAYMENT_REQUIRED: {
+            "description": NotEnoughPaidMoneyException.__doc__,
+        }
+    },
+)
 async def create_check(
     check: Check,
     service: CheckService,
     current_user: User = Depends(get_current_active_user),
 ):
-    result = await service.create(check, current_user)
+    try:
+        result = await service.create(check, current_user)
+    except NotEnoughPaidMoneyException as exc:
+        raise HTTPException(
+            status_code=status.HTTP_402_PAYMENT_REQUIRED,
+            detail=str(exc),
+        )
     return result
 
 
