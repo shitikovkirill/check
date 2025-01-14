@@ -31,14 +31,13 @@ class CheckService:
         return check
 
     async def get_by_secret(self, secret):
-        query = select(Check).where(Check.sectet == secret)
+        query = select(Check, User).join(User).where(Check.sectet == secret)
         result = await self.db.execute(query)
         try:
-            check = result.unique().one()[0]
+            check_and_owner = result.unique().one()
         except NoResultFound:
             raise CheckNotFound("Check with this id not found")
-        owner = await self.db.get(User, check.user_id)
-        return check, owner
+        return check_and_owner
 
     async def filter(
         self,

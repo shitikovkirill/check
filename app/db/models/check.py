@@ -6,6 +6,7 @@ from sqlmodel import Field, Relationship, SQLModel
 
 from app.check.typs import PaymentTyps
 from app.db.models.base import IdField, TimeStamp
+from app.db.models.user import User
 
 
 class Product(IdField, SQLModel, table=True):
@@ -42,3 +43,4 @@ class Check(IdField, TimeStamp, SQLModel, table=True):
     )
 
     user_id: int = Field(foreign_key="user.id")
+    user: User = Relationship(back_populates="checks")
