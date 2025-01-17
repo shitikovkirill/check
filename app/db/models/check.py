@@ -2,6 +2,7 @@ import secrets
 from typing import List
 
 from pydantic import NonNegativeInt, PositiveInt
+from sqlalchemy import Index
 from sqlmodel import Field, Relationship, SQLModel
 
 from app.check.typs import PaymentTyps
@@ -44,3 +45,7 @@ class Check(IdField, TimeStamp, SQLModel, table=True):
 
     user_id: int = Field(foreign_key="user.id")
     user: User = Relationship(back_populates="checks")
+    
+    __table_args__ = (
+        Index("created_at_index", "created_at"),
+    )

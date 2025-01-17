@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import UTC, datetime
 from itertools import chain
 from typing import List
 
