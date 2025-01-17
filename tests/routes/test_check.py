@@ -1,6 +1,7 @@
 import pytest
 
-from app.db.models.check import Check
+from app.check.typs import PaymentTyps
+from app.db.models.check import Check, Payment
 from app.db.models.user import User
 
 
@@ -33,7 +34,7 @@ class TestCreateCheck:
                 "payment": {"type": "cache", "amount": 1},
             },
             headers={
-                "Authorization": f"Bearer token",
+                "Authorization": "Bearer token",
                 "Content-Type": "application/json",
             },
         )
@@ -91,14 +92,28 @@ class TestCreateCheck:
         assert response.status_code == 422
 
 
-@pytest.fixture(scope="class")
-async def checks(db, user):
-    uset = await db.get(User, user.get("id"))
-    Check()
-
-
 class TestFilterCheck:
 
-    async def test_filter_by_start(self, checks):
+    @pytest.fixture
+    async def checks(self, db, user):
+        checks = []
+
+        user = await db.get(User, user.get("id"))
+        payment = Payment(type=PaymentTyps.CACHE, amount=1000)
+        db.add(payment)
+        await db.flush()
+        check = Check(payment=payment, total=1000, rest=50, user=user)
+        db.add(check)
+        await db.commit()
+
+        checks.append(check)
+        return checks
+
+    @classmethod
+    def setup_class(cls):
+        """setup any state specific to the execution of the given class (which
+        usually contains tests).
+        """
+
+    async def test_filter_by_start(self):
         pass
-        breakpoint()
