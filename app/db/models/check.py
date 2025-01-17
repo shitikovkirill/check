@@ -20,7 +20,7 @@ class Product(IdField, SQLModel, table=True):
 
 
 class Payment(IdField, SQLModel, table=True):
-    type: PaymentTyps
+    type: PaymentTyps = Field(index=True)
     amount: PositiveInt
 
     check: "Check" = Relationship(back_populates="payment")
@@ -36,7 +36,7 @@ class Check(IdField, TimeStamp, SQLModel, table=True):
     payment: Payment = Relationship(
         back_populates="check", sa_relationship_kwargs={"lazy": "joined"}
     )
-    total: PositiveInt
+    total: PositiveInt = Field(index=True)
     rest: NonNegativeInt
 
     sectet: str = Field(
@@ -45,7 +45,5 @@ class Check(IdField, TimeStamp, SQLModel, table=True):
 
     user_id: int = Field(foreign_key="user.id")
     user: User = Relationship(back_populates="checks")
-    
-    __table_args__ = (
-        Index("created_at_index", "created_at"),
-    )
+
+    __table_args__ = (Index("created_at_index", "created_at"),)
