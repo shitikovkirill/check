@@ -13,7 +13,7 @@ from app.db.models.user import User
 class Product(IdField, SQLModel, table=True):
     name: str
     price: PositiveInt
-    quantity: PositiveInt
+    quantity: float = Field(gt=0)
 
     check_id: int = Field(foreign_key="check.id")
     check: "Check" = Relationship(back_populates="products")

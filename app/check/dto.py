@@ -1,7 +1,6 @@
 from datetime import datetime
 from typing import List
 
-from pydantic import PositiveInt
 from sqlmodel import SQLModel
 
 from app.check.typs import PaymentTyps
@@ -9,6 +8,7 @@ from app.check.validators import (
     PriceDecimalToInt,
     PriceIntToDecimal,
     PriceRestIntToDecimal,
+    Quantity,
 )
 from app.db.models.base import IdField
 
@@ -16,7 +16,7 @@ from app.db.models.base import IdField
 class Product(SQLModel):
     name: str
     price: PriceDecimalToInt
-    quantity: PositiveInt
+    quantity: Quantity
 
 
 class Payment(SQLModel):
@@ -32,7 +32,7 @@ class Check(SQLModel):
 class ProductResponse(IdField, SQLModel):
     name: str
     price: PriceIntToDecimal
-    quantity: PositiveInt
+    quantity: Quantity
 
 
 class PaymentResponse(IdField, SQLModel):

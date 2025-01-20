@@ -25,6 +25,84 @@ class TestCreateCheck:
         assert response.json().get("rest") == 1.5
         assert response.status_code == 200
 
+    async def test_create_check_with_decimal_quantity(self, client, token):
+
+        response = client.post(
+            "/api/check",
+            json={
+                "products": [{"name": "string", "price": 1.50, "quantity": 0.5}],
+                "payment": {"type": "cache", "amount": 4.5},
+            },
+            headers={
+                "Authorization": f"Bearer {token}",
+                "Content-Type": "application/json",
+            },
+        )
+        assert response.json().get("id")
+        assert response.json().get("total") == 0.75
+        assert response.json().get("rest") == 3.75
+        assert response.status_code == 200
+
+    async def test_create_check_with_decimal_quantity_with_round_down(
+        self, client, token
+    ):
+
+        response = client.post(
+            "/api/check",
+            json={
+                "products": [{"name": "string", "price": 64.44, "quantity": 0.05}],
+                "payment": {"type": "cache", "amount": 4},
+            },
+            headers={
+                "Authorization": f"Bearer {token}",
+                "Content-Type": "application/json",
+            },
+        )
+        assert response.json().get("id")
+        assert response.json().get("total") == 3.22
+        assert response.json().get("rest") == 0.78
+        assert response.status_code == 200
+
+    async def test_create_check_with_decimal_quantity_with_round_up(
+        self, client, token
+    ):
+
+        response = client.post(
+            "/api/check",
+            json={
+                "products": [{"name": "string", "price": 65.33, "quantity": 0.05}],
+                "payment": {"type": "cache", "amount": 4},
+            },
+            headers={
+                "Authorization": f"Bearer {token}",
+                "Content-Type": "application/json",
+            },
+        )
+        assert response.json().get("id")
+        assert response.json().get("total") == 3.27
+        assert response.json().get("rest") == 0.73
+        assert response.status_code == 200
+
+    async def test_create_check_with_decimal_quantity_with_round_when_quantity_and_price_very_smol(
+        self, client, token
+    ):
+
+        response = client.post(
+            "/api/check",
+            json={
+                "products": [{"name": "string", "price": 0.01, "quantity": 0.001}],
+                "payment": {"type": "cache", "amount": 4.5},
+            },
+            headers={
+                "Authorization": f"Bearer {token}",
+                "Content-Type": "application/json",
+            },
+        )
+        assert response.json().get("id")
+        assert response.json().get("total") == 0.01
+        assert response.json().get("rest") == 4.49
+        assert response.status_code == 200
+
     async def test_not_correct_token(self, client):
 
         response = client.post(

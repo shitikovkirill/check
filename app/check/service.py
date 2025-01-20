@@ -1,4 +1,5 @@
 from datetime import datetime
+from decimal import ROUND_HALF_UP, Decimal
 from itertools import chain
 from typing import List
 
@@ -73,9 +74,13 @@ class CheckService:
         self.db.add(payment_obj)
         await self.db.flush()
 
-        total_price = 0
+        total_price: int = 0
         for product in check.products:
-            total_price += product.price * product.quantity
+            p_price = product.price * product.quantity
+            p_price = p_price.quantize(Decimal("1"), rounding=ROUND_HALF_UP)
+            if p_price == 0:
+                p_price = Decimal("1")
+            total_price += int(p_price)
 
         check_update = {
             "total": total_price,

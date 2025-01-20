@@ -11,3 +11,5 @@ PriceIntToDecimal = Annotated[
 PriceRestIntToDecimal = Annotated[
     PriceRestField, BeforeValidator(lambda v: v / 100), AfterValidator(float)
 ]
+
+Quantity = condecimal(gt=0, decimal_places=3)
